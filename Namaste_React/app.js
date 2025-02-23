@@ -1,3 +1,7 @@
+import React from "react";
+import ReactDOM from "react-dom";
+
+
 const parent = React.createElement(
   "div",
   { id: "parent" },
@@ -15,5 +19,6 @@ const heading = React.createElement(
   "Hello World from React"
 );
 console.log(parent);
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const container = document.getElementById("root");
+const root = ReactDOM.createRoot(container);
 root.render(parent);
