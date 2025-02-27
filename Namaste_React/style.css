@@ -2,7 +2,6 @@
 
 *{
   box-sizing: border-box ;
-  margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 400;
 }
@@ -105,7 +104,7 @@
 }
 
 .res-logo{
-  height: 60%;
+  height: 55%;
   width: 100%;
   object-fit: cover;
   border-radius: 15px;

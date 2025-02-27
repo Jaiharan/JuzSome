@@ -1,12 +1,25 @@
 import { FaSearch } from "react-icons/fa";
-import resData from "../utils/data.json";
 import RestaurantCard from "./RestaurantCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import SkimmerCards from "./Skimmer";
+import { DefaultSkimmerArraySize } from "./Skimmer";
 
 const Body = () => {
-  const [listOfrestaurants, setListOfrestaurants] = useState(
-    resData.restaurants
-  );
+  const [listOfrestaurants, setListOfrestaurants] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const data = await fetch(
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=11.01020&lng=76.97010&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+    );
+    const json = await data.json();
+    setListOfrestaurants(
+      json.data.cards[1].card.card.gridElements.infoWithStyle.restaurants
+    );
+  };
 
   return (
     <div className="body">
@@ -24,7 +37,7 @@ const Body = () => {
         <button
           onClick={() => {
             setListOfrestaurants(
-              listOfrestaurants.filter((res) => res.info.avgRating > 4.5)
+              listOfrestaurants.filter((res) => res.info.avgRating > 4.2)
             );
             alert("Restaurants with rating greater than 4.5 will be displayed");
           }}
@@ -33,11 +46,19 @@ const Body = () => {
           Filter
         </button>
       </div>
-      <div className="res-container">
-        {listOfrestaurants.map((resObj) => {
-          return <RestaurantCard key={resObj.info.id} resObj={resObj} />;
-        })}
-      </div>
+      {listOfrestaurants.length === 0 ? (
+        <div className=" res-container flex justify-center align-center m-5 p-4 ">
+          {DefaultSkimmerArraySize.map((item) => {
+            return <SkimmerCards key={item} />;
+          })}
+        </div>
+      ) : (
+        <div className="res-container">
+          {listOfrestaurants.map((resObj) => {
+            return <RestaurantCard key={resObj.info.id} resObj={resObj} />;
+          })}
+        </div>
+      )}
     </div>
   );
 };
