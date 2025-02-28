@@ -6,6 +6,8 @@ import { DefaultSkimmerArraySize } from "./Skimmer";
 
 const Body = () => {
   const [listOfrestaurants, setListOfrestaurants] = useState([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -19,21 +21,43 @@ const Body = () => {
     setListOfrestaurants(
       json.data.cards[1].card.card.gridElements.infoWithStyle.restaurants
     );
+    setFilteredRestaurants(json.data.cards[1].card.card.gridElements.infoWithStyle.restaurants);
+
   };
 
   return (
     <div className="body">
+      <div className=" flex align-center justify-center m-5 p-4 gap-6">
       <div className="search-bar mb-5">
         <input
           type="text"
           className="search-input"
           placeholder="Search here..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            const filtered = listOfrestaurants.filter((res) =>
+              res.info.name.toLowerCase().includes(search.toLowerCase())
+            );
+            setFilteredRestaurants(filtered);
+          }}
         ></input>
-        <button className="search-logo">
+        <button
+          className="search-logo"
+          onClick={() => {
+            console.log(search);
+
+            const filtered = listOfrestaurants.filter((res) =>
+              res.info.name.toLowerCase().includes(search.toLowerCase())
+            );
+            setFilteredRestaurants(filtered);
+            setSearch("");
+          }}
+        >
           <FaSearch />
         </button>
       </div>
-      <div className=" flex justify-center align-center m-5 p-4 ">
+      <div className=" flex justify-center align-center m-5 p-2 pb-0 ">
         <button
           onClick={() => {
             setListOfrestaurants(
@@ -46,7 +70,8 @@ const Body = () => {
           Filter
         </button>
       </div>
-      {listOfrestaurants.length === 0 ? (
+      </div>
+      {filteredRestaurants.length === 0 ? (
         <div className=" res-container flex justify-center align-center m-5 p-4 ">
           {DefaultSkimmerArraySize.map((item) => {
             return <SkimmerCards key={item} />;
@@ -54,7 +79,7 @@ const Body = () => {
         </div>
       ) : (
         <div className="res-container">
-          {listOfrestaurants.map((resObj) => {
+          {filteredRestaurants.map((resObj) => {
             return <RestaurantCard key={resObj.info.id} resObj={resObj} />;
           })}
         </div>

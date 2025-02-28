@@ -2,9 +2,6 @@ import { RES_IMG_URL } from "../utils/constants";
 
 const RestaurantCard = (props) => {
   const { resObj } = props;
-  if (!resObj) {
-    return null;
-  }
   const { name, cuisines, sla, avgRating, cloudinaryImageId } = resObj?.info;
   return (
     <div className="res-card">
